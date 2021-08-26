@@ -1,0 +1,37 @@
+This is a the usage file for the scripts to set up verified boot.
+
+NOTE: Your SD card must be partioned into 2 partitions, 128KB boot partition (FAT16 memory, boot flag enabled) and the rest the root filesystem partition.
+
+The usage is simple, traverse to this "scripts" directory and run "./main.sh path/to/SD/card".
+The scripts will set up a verified boot for the Raspberry Pi 3B+ SD you have pointed it to.
+
+
+Instructions on how to format the SD:
+fdisk /dev/sdx   # where sdx is the name of your sd-card
+   > p             # prints partition table
+   > d             # repeat until all partitions are deleted
+   > n             # create a new partition
+   > p             # create primary
+   > 1             # make it the first partition
+   > <enter>       # use the default sector
+   > +128M         # create a boot partition with 32MB of space
+   > n             # create rootfs partition
+   > p
+   > 2
+   > <enter>
+   > <enter>       # fill the remaining disk, adjust size to fit your needs
+   > t             # change partition type
+   > 1             # select first partition
+   > e             # use type 'e' (FAT16)
+   > a             # make partition bootable
+   > 1             # select first partition
+   > p             # double check everything looks right
+   > w             # write partition table to disk.
+
+main.sh runs 4 scripts:
+	- initialise.sh | downloads and configures Google repo tool, pulls in the OP-TEE manifest, and compiles the OP-TEE firmware
+	- buildfit.sh | builds the "fit" directory, generates RSA keys to sign image and creates the signed FIT image
+	- rebuild.sh | rebuilds the OP-TEE firmware after configuring to accept our FIT image
+	- format.sh | builds the boot and root filesystems on the SD, and copies over the FIT image and updated binaries
+
+For help with debugging or other usage problems with this script, contact me at: charlie@charliespruce.com

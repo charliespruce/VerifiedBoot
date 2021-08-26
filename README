@@ -1,4 +1,4 @@
-This is a the usage file for the scripts to set up verified boot on Raspberry Pi 3b+
+This is a the usage file for the scripts to set up verified boot on Raspberry Pi 3b+.
 
 NOTE: Your SD card must be partioned into 2 partitions, 128KB boot partition (FAT16 memory, boot flag enabled) and the rest the root filesystem partition.
 

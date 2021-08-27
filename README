@@ -1,4 +1,4 @@
-This is a the usage file for the scripts to set up verified boot on Raspberry Pi 3b+.
+This is a the usage file for the scripts to set up verified boot.
 
 NOTE: Your SD card must be partioned into 2 partitions, 128KB boot partition (FAT16 memory, boot flag enabled) and the rest the root filesystem partition.
 
@@ -27,6 +27,11 @@ fdisk /dev/sdx   # where sdx is the name of your sd-card
    > 1             # select first partition
    > p             # double check everything looks right
    > w             # write partition table to disk.
+
+The partition table should look something like this:
+Device     Boot  Start      End  Sectors  Size Id Type
+/dev/sdb1  *      2048   145407   143360   70M  e W95 FAT16 (LBA)
+/dev/sdb2       145408 31116287 30970880 14.8G 83 Linux
 
 main.sh runs 4 scripts:
 	- initialise.sh | downloads and configures Google repo tool, pulls in the OP-TEE manifest, and compiles the OP-TEE firmware

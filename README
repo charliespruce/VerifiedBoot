@@ -1,8 +1,8 @@
-This is a the usage file for the scripts to set up verified boot.
+This is a the usage file for the scripts to set up verified boot, on Ubuntu 18.04 with Python 2.7.17 as the default path.
 
-NOTE: Your SD card must be partioned into 2 partitions, 128KB boot partition (FAT16 memory, boot flag enabled) and the rest the root filesystem partition.
+NOTE: Your SD card must be partioned into 2 partitions, 128MB boot partition (FAT16 memory, boot flag enabled) and the rest the root filesystem partition.
 
-The usage is simple, traverse to this "scripts" directory and run "./main.sh path/to/SD/card".
+The usage is simple, traverse to this "scripts" directory and run "./main.sh path/to/SD/card". Don't run the script with sudo!
 The scripts will set up a verified boot for the Raspberry Pi 3B+ SD you have pointed it to.
 
 
@@ -14,7 +14,7 @@ fdisk /dev/sdx   # where sdx is the name of your sd-card
    > p             # create primary
    > 1             # make it the first partition
    > <enter>       # use the default sector
-   > +128M         # create a boot partition with 32MB of space
+   > +128M         # create a boot partition with 128MB of space
    > n             # create rootfs partition
    > p
    > 2
@@ -30,13 +30,15 @@ fdisk /dev/sdx   # where sdx is the name of your sd-card
 
 The partition table should look something like this:
 Device     Boot  Start      End  Sectors  Size Id Type
-/dev/sdx1  *      2048   145407   143360   70M  e W95 FAT16 (LBA)
+/dev/sdx1  *      2048   145407   143360  128M  e W95 FAT16 (LBA)
 /dev/sdx2       145408 31116287 30970880 14.8G 83 Linux
 
 main.sh runs 4 scripts:
-	- initialise.sh | downloads and configures Google repo tool, pulls in the OP-TEE manifest, and compiles the OP-TEE firmware
-	- buildfit.sh | builds the "fit" directory, generates RSA keys to sign image and creates the signed FIT image
+	- initialise.sh | downloads and configures Google repo tool (latest version), pulls in the OP-TEE manifest, and compiles the OP-TEE firmware
+	- buildfit.sh | builds the "fit" directory, generates RSA keys (2048 bit) to sign image and creates the signed FIT image
 	- rebuild.sh | rebuilds the OP-TEE firmware after configuring to accept our FIT image
 	- format.sh | builds the boot and root filesystems on the SD, and copies over the FIT image and updated binaries
 
+2 folders will be created in the user's home directory, "devel" and "bin".
+To test, run a listener such as minicom or picocom, 115200 bit rate on the correct tty device.
 For help with debugging or other usage problems with this script, contact me at: charlie@charliespruce.com
